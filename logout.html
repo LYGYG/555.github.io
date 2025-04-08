@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deletion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+            font-size: 32px;
+            margin-bottom: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .confirm-btn {
+            background: #ef4444;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .warning-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #fef2f2;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .warning-icon {
+            width: 32px;
+            height: 32px;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="iphone-frame">
+        <!-- Status Bar -->
+        <div class="bg-white h-12 flex items-center justify-between px-6">
+            <span class="text-sm">11:32</span>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="bg-white border-b">
+            <div class="flex items-center h-14 px-4">
+                <button class="w-10 h-10 flex items-center justify-center text-gray-600">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <h1 class="flex-1 text-center text-lg font-semibold">Delete Account</h1>
+                <div class="w-10"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-6 space-y-6">
+            <!-- Icon and Title -->
+            <div class="flex flex-col items-center text-center">
+                <div class="logout-icon">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Delete Your Account?</h2>
+                <p class="text-gray-500 mb-6">This action cannot be undone. Please proceed with caution.</p>
+            </div>
+
+            <!-- Warning Messages -->
+            <div class="space-y-4 slide-up">
+                <div class="warning-item">
+                    <div class="warning-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Data Deletion</h3>
+                        <p class="text-sm text-gray-500">All account-related data will be permanently deleted</p>
+                    </div>
+                </div>
+
+                <div class="warning-item">
+                    <div class="warning-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Grace Period</h3>
+                        <p class="text-sm text-gray-500">You can request account recovery within 7 days</p>
+                    </div>
+                </div>
+
+                <div class="warning-item">
+                    <div class="warning-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Asset Management</h3>
+                        <p class="text-sm text-gray-500">Please ensure all account assets have been handled</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Checkbox -->
+            <div class="flex items-center mb-6 slide-up" style="animation-delay: 0.1s">
+                <input type="checkbox" id="confirmCheck" class="w-5 h-5 rounded border-gray-300 text-red-500 focus:ring-red-500">
+                <label for="confirmCheck" class="ml-3 text-sm text-gray-600">
+                    I understand the consequences and confirm this action
+                </label>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 slide-up" style="animation-delay: 0.2s">
+                <button class="flex-1 cancel-btn">
+                    Cancel
+                </button>
+                <button class="flex-1 confirm-btn" id="confirmBtn" disabled>
+                    Confirm Deletion
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const confirmCheck = document.getElementById('confirmCheck');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        // Update button state when checkbox changes
+        confirmCheck.addEventListener('change', () => {
+            confirmBtn.disabled = !confirmCheck.checked;
+            if(confirmCheck.checked) {
+                confirmBtn.style.opacity = '1';
+                confirmBtn.style.cursor = 'pointer';
+            } else {
+                confirmBtn.style.opacity = '0.5';
+                confirmBtn.style.cursor = 'not-allowed';
+            }
+        });
+
+        // Initialize button state
+        confirmBtn.style.opacity = '0.5';
+        confirmBtn.style.cursor = 'not-allowed';
+
+        // Confirm button click handler
+        confirmBtn.addEventListener('click', () => {
+            if(confirmCheck.checked) {
+                // Add deletion logic here
+                alert('Account deletion request submitted');
+            }
+        });
+    </script>
+</body>
+</html> 
