@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能日历 - 设置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .setting-item {
+            transition: background-color 0.2s;
+        }
+        .setting-item:hover {
+            background-color: #f9fafb;
+        }
+        /* 隐藏滚动条但保持滚动功能 */
+        main {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        main::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+    </style>
+</head>
+<body class="h-full">
+    <div class="flex flex-col h-full">
+        <!-- 顶部导航栏 -->
+        <header class="bg-white shadow-sm p-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-semibold text-gray-800">设置</h1>
+                <button class="p-2 rounded-full hover:bg-gray-100">
+                    <i class="fas fa-ellipsis-h text-gray-600"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="flex-1 p-4 overflow-y-auto">
+            <!-- 用户信息 -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-indigo-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold">用户名</h2>
+                        <p class="text-sm text-gray-500">user@example.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设置选项 -->
+            <div class="space-y-4">
+                <!-- 通知设置 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-bell text-indigo-600"></i>
+                                <span>通知设置</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-palette text-indigo-600"></i>
+                                <span>主题设置</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-language text-indigo-600"></i>
+                                <span>语言设置</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据管理 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-cloud-upload-alt text-indigo-600"></i>
+                                <span>数据备份</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-sync text-indigo-600"></i>
+                                <span>数据同步</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其他设置 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-shield-alt text-indigo-600"></i>
+                                <span>隐私设置</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="setting-item p-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-question-circle text-indigo-600"></i>
+                                <span>帮助与反馈</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="setting-item p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-info-circle text-indigo-600"></i>
+                                <span>关于我们</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <nav class="bg-white border-t border-gray-200 p-2">
+            <div class="flex justify-around">
+                <button class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-xs mt-1">首页</span>
+                </button>
+                <button class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-calendar text-lg"></i>
+                    <span class="text-xs mt-1">日历</span>
+                </button>
+                <button class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-tasks text-lg"></i>
+                    <span class="text-xs mt-1">任务</span>
+                </button>
+                <button class="flex flex-col items-center text-indigo-600">
+                    <i class="fas fa-cog text-lg"></i>
+                    <span class="text-xs mt-1">设置</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</body>
+</html> 
