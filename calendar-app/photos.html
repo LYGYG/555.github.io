@@ -1,0 +1,445 @@
+                <!-- 相册网格 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- 相册1 - 客厅日历 -->
+                    <a href="photo-slideshow.html" class="album-card bg-white">
+                        <div class="album-preview">
+                            <img src="https://images.pexels.com/photos/977003/pexels-photo-977003.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="w-full h-full object-cover" alt="客厅日历">
+                            <div class="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded-md text-xs">
+                                24张照片
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium">客厅日历</h4>
+                                <i class="fas fa-angle-right text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 text-xs">昨天更新</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 相册2 - 厨房日历 -->
+                    <a href="photo-slideshow.html" class="album-card bg-white">
+                        <div class="album-preview">
+                            <img src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="w-full h-full object-cover" alt="厨房日历">
+                            <div class="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded-md text-xs">
+                                12张照片
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium">厨房日历</h4>
+                                <i class="fas fa-angle-right text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 text-xs">上周更新</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 相册3 - 卧室日历 -->
+                    <a href="photo-slideshow.html" class="album-card bg-white">
+                        <div class="album-preview">
+                            <img src="https://images.pexels.com/photos/775219/pexels-photo-775219.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="w-full h-full object-cover" alt="卧室日历">
+                            <div class="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded-md text-xs">
+                                8张照片
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium">卧室日历</h4>
+                                <i class="fas fa-angle-right text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 text-xs">2周前更新</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 相册4 - 节日相册 -->
+                    <a href="photo-slideshow.html" class="album-card bg-white">
+                        <div class="album-preview">
+                            <img src="https://images.pexels.com/photos/1415131/pexels-photo-1415131.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" class="w-full h-full object-cover" alt="节日相册">
+                            <div class="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded-md text-xs">
+                                16张照片
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium">节日相册</h4>
+                                <i class="fas fa-angle-right text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 text-xs">1个月前更新</p>
+                        </div>
+                    </a>
+                </div>
+
+                <style>
+                    .photo-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 8px;
+                    }
+                    
+                    .photo-item {
+                        position: relative;
+                        aspect-ratio: 1;
+                        overflow: hidden;
+                        border-radius: 8px;
+                    }
+                    
+                    .album-card {
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                        cursor: pointer;
+                    }
+                    
+                    .album-preview {
+                        position: relative;
+                        height: 120px;
+                        overflow: hidden;
+                    }
+                    
+                    .photo-select-checkbox {
+                        position: absolute;
+                        top: 8px;
+                        right: 8px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background-color: rgba(255, 255, 255, 0.8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10;
+                    }
+                    
+                    .photo-select-checkbox.selected {
+                        background-color: #3b82f6;
+                        color: white;
+                    }
+                    
+                    .tab-active {
+                        color: #3b82f6;
+                        border-bottom: 2px solid #3b82f6;
+                    }
+                    
+                    /* 模态框样式 */
+                    .modal {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: rgba(0,0,0,0.5);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 1000;
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity 0.3s ease;
+                    }
+                    
+                    .modal.show {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+                    
+                    .modal-content {
+                        width: 90%;
+                        max-width: 330px;
+                        background: white;
+                        border-radius: 16px;
+                        padding: 20px;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                        transform: translateY(20px);
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .modal.show .modal-content {
+                        transform: translateY(0);
+                    }
+                    
+                    .file-upload-area {
+                        border: 2px dashed #e5e7eb;
+                        border-radius: 8px;
+                        padding: 20px;
+                        text-align: center;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .file-upload-area:hover {
+                        border-color: #3b82f6;
+                        background-color: #f0f9ff;
+                    }
+                    
+                    .add-menu-item:hover {
+                        background-color: #f9fafb;
+                    }
+                    
+                    .add-menu-item i {
+                        font-size: 1.25rem;
+                        margin-right: 12px;
+                    }
+                    
+                    /* 添加菜单样式 */
+                    .add-menu-item {
+                        display: flex;
+                        align-items: center;
+                        padding: 12px 16px;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .add-menu-item:not(:last-child) {
+                        border-bottom: 1px solid #f0f0f0;
+                    }
+                    
+                    .add-menu-item:hover {
+                        background-color: #f9fafb;
+                    }
+                    
+                    .add-menu-item i {
+                        font-size: 1.25rem;
+                        margin-right: 12px;
+                    }
+                </style>
+
+                <div>
+                    <!-- 照片上传模态框 -->
+                    <div id="upload-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold">上传照片</h3>
+                                <button id="close-upload-modal" class="text-gray-500">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <form id="upload-photo-form">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                                        选择相册
+                                    </label>
+                                    <select id="album-select" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="living-room">客厅日历</option>
+                                        <option value="kitchen">厨房日历</option>
+                                        <option value="bedroom">卧室日历</option>
+                                        <option value="holiday">节日相册</option>
+                                        <option value="new">创建新相册...</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="new-album-name" class="mb-4 hidden">
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                                        新相册名称
+                                    </label>
+                                    <input type="text" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入相册名称">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                                        选择照片
+                                    </label>
+                                    <div class="file-upload-area" id="file-upload-area">
+                                        <input type="file" id="photo-files" multiple accept="image/*" class="hidden">
+                                        <div class="py-4">
+                                            <i class="fas fa-cloud-upload-alt text-blue-500 text-3xl mb-2"></i>
+                                            <p class="text-gray-600 text-sm">点击或拖拽照片至此处上传</p>
+                                            <p class="text-gray-400 text-xs mt-1">支持 JPG, PNG, GIF 格式</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="preview-photos" class="mb-4 hidden">
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                                        预览 (<span id="photo-count">0</span>张)
+                                    </label>
+                                    <div class="grid grid-cols-4 gap-2 preview-container">
+                                        <!-- 预览图会在这里显示 -->
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-end mt-6">
+                                    <button type="button" id="cancel-upload" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg mr-2">
+                                        取消
+                                    </button>
+                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                        上传
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // 上传照片按钮点击事件
+                    document.getElementById('upload-floating-button').addEventListener('click', function() {
+                        document.getElementById('upload-modal').classList.add('show');
+                    });
+                    
+                    document.getElementById('add-photo-button').addEventListener('click', function() {
+                        document.getElementById('upload-modal').classList.add('show');
+                    });
+                    
+                    // 关闭模态框
+                    document.getElementById('close-upload-modal').addEventListener('click', function() {
+                        document.getElementById('upload-modal').classList.remove('show');
+                    });
+                    
+                    document.getElementById('cancel-upload').addEventListener('click', function() {
+                        document.getElementById('upload-modal').classList.remove('show');
+                    });
+                    
+                    // 选择相册下拉框变化事件
+                    document.getElementById('album-select').addEventListener('change', function() {
+                        const newAlbumDiv = document.getElementById('new-album-name');
+                        if (this.value === 'new') {
+                            newAlbumDiv.classList.remove('hidden');
+                        } else {
+                            newAlbumDiv.classList.add('hidden');
+                        }
+                    });
+                    
+                    // 文件上传区域点击事件
+                    document.getElementById('file-upload-area').addEventListener('click', function() {
+                        document.getElementById('photo-files').click();
+                    });
+                    
+                    // 文件选择变化事件
+                    document.getElementById('photo-files').addEventListener('change', function() {
+                        const files = this.files;
+                        if (files.length > 0) {
+                            // 显示预览区域
+                            const previewArea = document.getElementById('preview-photos');
+                            previewArea.classList.remove('hidden');
+                            
+                            // 更新照片数量
+                            document.getElementById('photo-count').textContent = files.length;
+                            
+                            // 清空预览容器
+                            const previewContainer = previewArea.querySelector('.preview-container');
+                            previewContainer.innerHTML = '';
+                            
+                            // 添加预览图
+                            Array.from(files).forEach(file => {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    const previewItem = document.createElement('div');
+                                    previewItem.className = 'preview-item';
+                                    previewItem.innerHTML = `
+                                        <img src="${e.target.result}" class="w-full h-20 object-cover rounded-lg" alt="Preview">
+                                    `;
+                                    previewContainer.appendChild(previewItem);
+                                }
+                                reader.readAsDataURL(file);
+                            });
+                        }
+                    });
+                    
+                    // 表单提交
+                    document.getElementById('upload-photo-form').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // 在实际应用中，这里会上传照片到服务器
+                        
+                        // 显示上传成功消息
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg';
+                        successMsg.textContent = '照片上传成功';
+                        document.body.appendChild(successMsg);
+                        
+                        // 3秒后移除消息
+                        setTimeout(() => {
+                            successMsg.remove();
+                        }, 3000);
+                        
+                        // 关闭模态框
+                        document.getElementById('upload-modal').classList.remove('show');
+                    });
+                    
+                    // 添加按钮点击事件
+                    document.getElementById('add-button').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const menu = document.getElementById('add-menu');
+                        menu.classList.toggle('hidden');
+                    });
+                    
+                    // 点击页面其他区域关闭菜单
+                    document.addEventListener('click', function(e) {
+                        const menu = document.getElementById('add-menu');
+                        if (!menu.classList.contains('hidden') && !e.target.closest('#add-button') && !e.target.closest('#add-menu')) {
+                            menu.classList.add('hidden');
+                        }
+                    });
+                    
+                    // 添加菜单项点击事件
+                    document.querySelectorAll('.add-menu-item').forEach(item => {
+                        item.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const action = this.dataset.action;
+                            document.getElementById('add-menu').classList.add('hidden');
+                            
+                            // 根据不同的操作执行不同的操作
+                            if (action === 'shopping') {
+                                window.location.href = 'home.html';
+                            } else if (action === 'schedule') {
+                                window.location.href = 'home.html';
+                            } else if (action === 'family') {
+                                window.location.href = 'family-members.html';
+                            } else if (action === 'task') {
+                                window.location.href = 'tasks.html';
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav relative">
+        <a href="home.html" class="nav-item">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <span class="nav-text">Calendar</span>
+        </a>
+        <a href="tasks.html" class="nav-item">
+            <i class="nav-icon fas fa-tasks"></i>
+            <span class="nav-text">Tasks</span>
+        </a>
+        
+        <!-- Large Add Button in Middle -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style="top: -15px;">
+            <button id="add-button" class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-500 text-white shadow-lg border-4 border-white hover:bg-blue-600 transition-colors">
+                <i class="fas fa-plus text-xl"></i>
+            </button>
+            
+            <!-- 添加功能菜单 (默认隐藏) -->
+            <div id="add-menu" class="hidden absolute bottom-20 -left-24 w-64 bg-white rounded-xl shadow-lg overflow-hidden">
+                <a href="#" class="add-menu-item" data-action="schedule">
+                    <i class="fas fa-calendar-plus text-blue-500"></i>
+                    <span>添加日程</span>
+                </a>
+                <a href="#" class="add-menu-item" data-action="family">
+                    <i class="fas fa-user-plus text-green-500"></i>
+                    <span>添加家庭成员</span>
+                </a>
+                <a href="#" class="add-menu-item" data-action="shopping">
+                    <i class="fas fa-shopping-cart text-orange-500"></i>
+                    <span>添加购物清单</span>
+                </a>
+                <a href="#" class="add-menu-item" data-action="task">
+                    <i class="fas fa-clipboard-list text-purple-500"></i>
+                    <span>添加任务</span>
+                </a>
+            </div>
+        </div>
+        
+        <a href="photos.html" class="nav-item active">
+            <i class="nav-icon fas fa-images"></i>
+            <span class="nav-text">Photos</span>
+        </a>
+        <a href="settings.html" class="nav-item">
+            <i class="nav-icon fas fa-user"></i>
+            <span class="nav-text">My</span>
+        </a>
+    </div>
+</body>
+</html> 

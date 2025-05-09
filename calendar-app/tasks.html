@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks & Events - Calendar Tool App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        .task-card {
+            border-left-width: 4px;
+        }
+        
+        .priority-high {
+            border-left-color: #ef4444;
+        }
+        
+        .priority-medium {
+            border-left-color: #f59e0b;
+        }
+        
+        .priority-low {
+            border-left-color: #10b981;
+        }
+        
+        .tab-active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+        
+        .checkbox-container {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .checkbox-checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .task-completed {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        
+        .add-task-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .add-task-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            width: 90%;
+            max-width: 330px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .add-task-modal.show .modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="iphone-container">
+        <!-- Dynamic Island -->
+        <div class="dynamic-island"></div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="text-lg font-semibold">Tasks & Events</div>
+            <div class="flex items-center space-x-3">
+                <button id="add-task-button" class="text-blue-500">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-8 h-8 rounded-full object-cover">
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content pb-24">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 mb-6">
+                <button class="flex-1 py-3 text-center tab-active">
+                    Tasks
+                </button>
+                <button class="flex-1 py-3 text-center text-gray-500">
+                    Events
+                </button>
+                <button class="flex-1 py-3 text-center text-gray-500">
+                    Completed
+                </button>
+            </div>
+            
+            <!-- Search and Filters -->
+            <div class="mb-6">
+                <div class="relative mb-4">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" class="bg-white w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search tasks...">
+                </div>
+                
+                <div class="flex space-x-2 overflow-x-auto pb-2">
+                    <button class="px-4 py-2 bg-blue-100 text-blue-500 rounded-full text-sm font-medium whitespace-nowrap">
+                        All
+                    </button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                        Today
+                    </button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                        This Week
+                    </button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                        Priority
+                    </button>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                        Assigned to me
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Today's Task Stats -->
+            <div class="bg-white rounded-xl p-4 mb-6 shadow-sm">
+                <h3 class="font-semibold mb-3">Today's Progress</h3>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-gray-600 text-sm">Completion (3/5)</div>
+                    <div class="text-blue-500 text-sm">60%</div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-blue-500 h-2.5 rounded-full" style="width: 60%"></div>
+                </div>
+                
+                <div class="flex justify-between mt-4 text-center">
+                    <div>
+                        <div class="text-gray-800 font-bold">5</div>
+                        <div class="text-xs text-gray-500">Total</div>
+                    </div>
+                    <div>
+                        <div class="text-green-500 font-bold">3</div>
+                        <div class="text-xs text-gray-500">Completed</div>
+                    </div>
+                    <div>
+                        <div class="text-yellow-500 font-bold">1</div>
+                        <div class="text-xs text-gray-500">In Progress</div>
+                    </div>
+                    <div>
+                        <div class="text-red-500 font-bold">1</div>
+                        <div class="text-xs text-gray-500">Overdue</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Task List -->
+            <div class="space-y-4">
+                <h3 class="font-semibold text-lg mb-3">Tasks</h3>
+                
+                <!-- Overdue Task -->
+                <div class="task-card priority-high bg-white rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="checkbox-container mr-3 mt-1">
+                            <i class="fas fa-check text-white text-xs hidden"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <h4 class="font-medium">Complete Project Report</h4>
+                                <span class="text-red-500 text-xs px-2 py-0.5 bg-red-50 rounded-full">Overdue</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">Prepare quarterly project summary and analysis</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    Yesterday
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Today's Task 1 -->
+                <div class="task-card priority-medium bg-white rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="checkbox-container mr-3 mt-1">
+                            <i class="fas fa-check text-white text-xs hidden"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <h4 class="font-medium">Prepare Team Meeting</h4>
+                                <span class="text-yellow-500 text-xs px-2 py-0.5 bg-yellow-50 rounded-full">Medium</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">Collect feedback from departments, prepare agenda</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    Today 2:00 PM
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Today's Task 2 - Completed -->
+                <div class="task-card priority-medium bg-white rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="checkbox-container checkbox-checked mr-3 mt-1">
+                            <i class="fas fa-check text-white text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <h4 class="font-medium task-completed">Reply to Client Emails</h4>
+                                <span class="text-gray-400 text-xs px-2 py-0.5 bg-gray-100 rounded-full">Completed</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2 task-completed">Reply to client inquiries about new features</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    Today 10:30 AM
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tomorrow's Task -->
+                <div class="task-card priority-low bg-white rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="checkbox-container mr-3 mt-1">
+                            <i class="fas fa-check text-white text-xs hidden"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <h4 class="font-medium">Update Product Design Docs</h4>
+                                <span class="text-green-500 text-xs px-2 py-0.5 bg-green-50 rounded-full">Low</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">Update design docs and prototypes based on feedback</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    Tomorrow
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-6 h-6 rounded-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- This Week's Task -->
+                <div class="task-card priority-low bg-white rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="checkbox-container mr-3 mt-1">
+                            <i class="fas fa-check text-white text-xs hidden"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <h4 class="font-medium">Prepare Weekly Report</h4>
+                                <span class="text-green-500 text-xs px-2 py-0.5 bg-green-50 rounded-full">Low</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">Compile weekly work content for Friday report</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    Friday
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="flex -space-x-2">
+                                        <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full border-2 border-white">
+                                        <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-6 h-6 rounded-full border-2 border-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Create Task Button -->
+            <div class="fixed bottom-20 right-4 z-10">
+                <button id="floating-add-button" class="h-14 w-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-plus text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation Bar -->
+        <div class="bottom-nav relative">
+            <a href="home.html" class="nav-item">
+                <i class="nav-icon fas fa-calendar-alt"></i>
+                <span class="nav-text">Calendar</span>
+            </a>
+            <a href="tasks.html" class="nav-item active">
+                <i class="nav-icon fas fa-tasks"></i>
+                <span class="nav-text">Tasks</span>
+            </a>
+            
+            <!-- Large Add Button in Middle -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style="top: -15px;">
+                <button id="add-button" class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-500 text-white shadow-lg border-4 border-white hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-plus text-xl"></i>
+                </button>
+                
+                <!-- 添加功能菜单 (默认隐藏) -->
+                <div id="add-menu" class="hidden absolute bottom-20 -left-24 w-64 bg-white rounded-xl shadow-lg overflow-hidden">
+                    <a href="#" class="add-menu-item" data-action="schedule">
+                        <i class="fas fa-calendar-plus text-blue-500"></i>
+                        <span>添加日程</span>
+                    </a>
+                    <a href="#" class="add-menu-item" data-action="family">
+                        <i class="fas fa-user-plus text-green-500"></i>
+                        <span>添加家庭成员</span>
+                    </a>
+                    <a href="#" class="add-menu-item" data-action="shopping">
+                        <i class="fas fa-shopping-cart text-orange-500"></i>
+                        <span>添加购物清单</span>
+                    </a>
+                    <a href="#" class="add-menu-item" data-action="task">
+                        <i class="fas fa-clipboard-list text-purple-500"></i>
+                        <span>添加任务</span>
+                    </a>
+                </div>
+            </div>
+            
+            <a href="photos.html" class="nav-item">
+                <i class="nav-icon fas fa-images"></i>
+                <span class="nav-text">Photos</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="nav-icon fas fa-user"></i>
+                <span class="nav-text">My</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Add Task Modal -->
+    <div id="add-task-modal" class="add-task-modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">Add New Task</h3>
+                <button id="close-modal" class="text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="add-task-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="task-title">
+                        Title*
+                    </label>
+                    <input type="text" id="task-title" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter task title" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="task-description">
+                        Description
+                    </label>
+                    <textarea id="task-description" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" placeholder="Enter description"></textarea>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="task-date">
+                            Date*
+                        </label>
+                        <input type="date" id="task-date" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="task-time">
+                            Time
+                        </label>
+                        <input type="time" id="task-time" class="bg-white w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                        Priority
+                    </label>
+                    <div class="flex space-x-2">
+                        <button type="button" class="flex-1 py-2 rounded-lg text-red-500 bg-red-50 border border-red-100 hover:bg-red-100" data-priority="high">
+                            High
+                        </button>
+                        <button type="button" class="flex-1 py-2 rounded-lg text-yellow-500 bg-yellow-50 border border-yellow-100 hover:bg-yellow-100" data-priority="medium">
+                            Medium
+                        </button>
+                        <button type="button" class="flex-1 py-2 rounded-lg text-green-500 bg-green-50 border border-green-100 hover:bg-green-100 active" data-priority="low">
+                            Low
+                        </button>
+                    </div>
+                    <input type="hidden" id="task-priority" value="low">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">
+                        Add to Calendar
+                    </label>
+                    <div class="relative inline-block w-full align-middle select-none">
+                        <input type="checkbox" id="add-to-calendar" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer"/>
+                        <label for="add-to-calendar" class="toggle-label block overflow-hidden h-6 rounded-full bg-blue-500 cursor-pointer"></label>
+                        <span class="text-sm text-gray-500 ml-12">Show this task on calendar</span>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end mt-6">
+                    <button type="button" id="cancel-task" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg mr-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                        Add Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Task completion toggle effect
+        document.querySelectorAll('.checkbox-container').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                this.classList.toggle('checkbox-checked');
+                const checkIcon = this.querySelector('i');
+                if (this.classList.contains('checkbox-checked')) {
+                    checkIcon.classList.remove('hidden');
+                    // Mark related text as completed
+                    const taskCard = this.closest('.task-card');
+                    taskCard.querySelector('h4').classList.add('task-completed');
+                    taskCard.querySelector('p').classList.add('task-completed');
+                } else {
+                    checkIcon.classList.add('hidden');
+                    // Remove completed style
+                    const taskCard = this.closest('.task-card');
+                    taskCard.querySelector('h4').classList.remove('task-completed');
+                    taskCard.querySelector('p').classList.remove('task-completed');
+                }
+            });
+        });
+        
+        // Add task modal functionality
+        const modal = document.getElementById('add-task-modal');
+        const addTaskButton = document.getElementById('add-task-button');
+        const floatingAddButton = document.getElementById('floating-add-button');
+        const closeModalButton = document.getElementById('close-modal');
+        const cancelTaskButton = document.getElementById('cancel-task');
+        const addTaskForm = document.getElementById('add-task-form');
+        
+        // Open modal
+        function openModal() {
+            modal.classList.add('show');
+            // Set today as default date
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('task-date').value = `${yyyy}-${mm}-${dd}`;
+        }
+        
+        // Close modal
+        function closeModal() {
+            modal.classList.remove('show');
+            addTaskForm.reset();
+        }
+        
+        addTaskButton.addEventListener('click', openModal);
+        floatingAddButton.addEventListener('click', openModal);
+        closeModalButton.addEventListener('click', closeModal);
+        cancelTaskButton.addEventListener('click', closeModal);
+        
+        // Priority selection
+        const priorityButtons = document.querySelectorAll('[data-priority]');
+        const priorityInput = document.getElementById('task-priority');
+        
+        priorityButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                priorityButtons.forEach(btn => btn.classList.remove('active', 'ring-2', 'ring-offset-2'));
+                // Add active class to clicked button
+                this.classList.add('active', 'ring-2', 'ring-offset-2');
+                // Update hidden input value
+                priorityInput.value = this.dataset.priority;
+            });
+        });
+        
+        // Form submission - would integrate with backend in real implementation
+        addTaskForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const title = document.getElementById('task-title').value;
+            const description = document.getElementById('task-description').value;
+            const date = document.getElementById('task-date').value;
+            const time = document.getElementById('task-time').value;
+            const priority = document.getElementById('task-priority').value;
+            const addToCalendar = document.getElementById('add-to-calendar').checked;
+            
+            // Create new task
+            const tasksList = document.querySelector('.space-y-4');
+            
+            // Create task element (in a real app, this would be done after API confirmation)
+            const newTask = document.createElement('div');
+            newTask.className = `task-card priority-${priority} bg-white rounded-lg p-4 shadow-sm`;
+            
+            const priorityLabel = priority === 'high' ? 'High' : priority === 'medium' ? 'Medium' : 'Low';
+            const priorityColor = priority === 'high' ? 'red' : priority === 'medium' ? 'yellow' : 'green';
+            
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+            
+            const timeDisplay = time ? time : '';
+            
+            newTask.innerHTML = `
+                <div class="flex items-start">
+                    <div class="checkbox-container mr-3 mt-1">
+                        <i class="fas fa-check text-white text-xs hidden"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between mb-1">
+                            <h4 class="font-medium">${title}</h4>
+                            <span class="text-${priorityColor}-500 text-xs px-2 py-0.5 bg-${priorityColor}-50 rounded-full">${priorityLabel}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-2">${description}</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-calendar-day mr-1"></i>
+                                ${formattedDate} ${timeDisplay}
+                            </div>
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to task list
+            tasksList.appendChild(newTask);
+            
+            // Initialize checkbox behavior for the new task
+            const checkbox = newTask.querySelector('.checkbox-container');
+            checkbox.addEventListener('click', function() {
+                this.classList.toggle('checkbox-checked');
+                const checkIcon = this.querySelector('i');
+                if (this.classList.contains('checkbox-checked')) {
+                    checkIcon.classList.remove('hidden');
+                    const taskCard = this.closest('.task-card');
+                    taskCard.querySelector('h4').classList.add('task-completed');
+                    taskCard.querySelector('p').classList.add('task-completed');
+                } else {
+                    checkIcon.classList.add('hidden');
+                    const taskCard = this.closest('.task-card');
+                    taskCard.querySelector('h4').classList.remove('task-completed');
+                    taskCard.querySelector('p').classList.remove('task-completed');
+                }
+            });
+            
+            // If task should be added to calendar, save it to localStorage
+            if (addToCalendar) {
+                // Create task object for calendar
+                const calendarTask = {
+                    title: title,
+                    description: description,
+                    date: date,
+                    time: time,
+                    priority: priority,
+                    duration: '45 min', // Default duration
+                    completed: false
+                };
+                
+                // Get existing calendar tasks or initialize empty array
+                const existingTasks = localStorage.getItem('calendarTasks') 
+                    ? JSON.parse(localStorage.getItem('calendarTasks')) 
+                    : [];
+                    
+                // Add new task
+                existingTasks.push(calendarTask);
+                
+                // Save back to localStorage
+                localStorage.setItem('calendarTasks', JSON.stringify(existingTasks));
+                
+                // Show success message
+                const successMsg = document.createElement('div');
+                successMsg.className = 'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg';
+                successMsg.textContent = 'Task added to calendar';
+                document.body.appendChild(successMsg);
+                
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    successMsg.remove();
+                }, 3000);
+            }
+            
+            // Close modal
+            closeModal();
+            
+            // Update task count (in a real app this would be more sophisticated)
+            const totalCount = document.querySelector('.text-gray-800.font-bold');
+            totalCount.textContent = parseInt(totalCount.textContent) + 1;
+        });
+
+        // Add event listener for the new add button in the nav bar
+        document.getElementById('nav-add-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal();
+        });
+    </script>
+</body>
+</html>
