@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成员分组 - 日历工具APP</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        .group-card {
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .group-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+        
+        .device-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar flex items-center">
+            <a href="family-members.html" class="mr-2">
+                <i class="fas fa-chevron-left text-blue-500"></i>
+            </a>
+            <div class="text-lg font-semibold">成员分组</div>
+            <div class="flex-grow"></div>
+            <a href="#" class="text-blue-500">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content pb-24">
+            <!-- 说明文本 -->
+            <div class="mb-6">
+                <h2 class="text-xl font-bold mb-2">管理家庭分组</h2>
+                <p class="text-gray-600 text-sm">创建不同的成员分组，以便于管理不同设备的访问权限</p>
+            </div>
+            
+            <!-- 创建新分组按钮 -->
+            <div class="mb-6">
+                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center">
+                    <i class="fas fa-users-cog mr-2"></i> 创建新分组
+                </button>
+            </div>
+            
+            <!-- 分组列表 -->
+            <div class="space-y-5">
+                <!-- 分组1 -->
+                <div class="group-card bg-white shadow-sm">
+                    <div class="p-4 bg-blue-50 border-b border-blue-100 flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3 class="font-bold text-lg">家庭成员</h3>
+                        </div>
+                        <span class="text-gray-500 text-sm">5位成员</span>
+                    </div>
+                    
+                    <div class="p-4">
+                        <!-- 分组成员 -->
+                        <div class="mb-4">
+                            <h4 class="text-sm text-gray-500 mb-2">分组成员</h4>
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2 mr-3">
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-500 text-xs">+1</span>
+                                    </div>
+                                </div>
+                                <button class="text-blue-500 text-sm">管理</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 可访问的设备 -->
+                        <div>
+                            <h4 class="text-sm text-gray-500 mb-2">可访问的设备</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="flex items-center bg-gray-50 rounded-lg p-2 pr-3">
+                                    <div class="device-icon bg-blue-100 text-blue-500 mr-2">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <span class="text-sm">客厅日历</span>
+                                </div>
+                                <div class="flex items-center bg-gray-50 rounded-lg p-2 pr-3">
+                                    <div class="device-icon bg-green-100 text-green-500 mr-2">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <span class="text-sm">厨房日历</span>
+                                </div>
+                                <div class="flex items-center bg-gray-50 rounded-lg p-2 pr-3">
+                                    <div class="device-icon bg-purple-100 text-purple-500 mr-2">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <span class="text-sm">卧室日历</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex justify-end mt-4">
+                            <button class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm mr-2">
+                                编辑
+                            </button>
+                            <button class="px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-sm">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分组2 -->
+                <div class="group-card bg-white shadow-sm">
+                    <div class="p-4 bg-green-50 border-b border-green-100 flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center mr-3">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <h3 class="font-bold text-lg">厨房用户</h3>
+                        </div>
+                        <span class="text-gray-500 text-sm">3位成员</span>
+                    </div>
+                    
+                    <div class="p-4">
+                        <!-- 分组成员 -->
+                        <div class="mb-4">
+                            <h4 class="text-sm text-gray-500 mb-2">分组成员</h4>
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2 mr-3">
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                                <button class="text-blue-500 text-sm">管理</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 可访问的设备 -->
+                        <div>
+                            <h4 class="text-sm text-gray-500 mb-2">可访问的设备</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="flex items-center bg-gray-50 rounded-lg p-2 pr-3">
+                                    <div class="device-icon bg-green-100 text-green-500 mr-2">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <span class="text-sm">厨房日历</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex justify-end mt-4">
+                            <button class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm mr-2">
+                                编辑
+                            </button>
+                            <button class="px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-sm">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分组3 -->
+                <div class="group-card bg-white shadow-sm">
+                    <div class="p-4 bg-purple-50 border-b border-purple-100 flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center mr-3">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                            <h3 class="font-bold text-lg">卧室用户</h3>
+                        </div>
+                        <span class="text-gray-500 text-sm">2位成员</span>
+                    </div>
+                    
+                    <div class="p-4">
+                        <!-- 分组成员 -->
+                        <div class="mb-4">
+                            <h4 class="text-sm text-gray-500 mb-2">分组成员</h4>
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2 mr-3">
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="member-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                                <button class="text-blue-500 text-sm">管理</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 可访问的设备 -->
+                        <div>
+                            <h4 class="text-sm text-gray-500 mb-2">可访问的设备</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="flex items-center bg-gray-50 rounded-lg p-2 pr-3">
+                                    <div class="device-icon bg-purple-100 text-purple-500 mr-2">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <span class="text-sm">卧室日历</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex justify-end mt-4">
+                            <button class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm mr-2">
+                                编辑
+                            </button>
+                            <button class="px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-sm">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 提示信息 -->
+            <div class="mt-8 p-4 bg-yellow-50 rounded-xl border border-yellow-100">
+                <div class="flex">
+                    <div class="text-yellow-500 mr-3">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-yellow-700 mb-1">提示</h4>
+                        <p class="text-sm text-yellow-600">通过创建不同的成员分组，您可以精确控制哪些家庭成员可以访问和操作不同的日历设备。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
